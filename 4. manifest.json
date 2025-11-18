@@ -1,10 +1,11 @@
 {
   "name": "NeuroRefúgio",
-  "short_name": "Refúgio",
+  "short_name": "NeuroRefúgio",
+  "description": "Aplicativo terapêutico offline para respiração, foco, conforto e silêncio guiado.",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#f4f4f4",
-  "theme_color": "#d9e2ec",
+  "background_color": "#1c2a38",
+  "theme_color": "#1c2a38",
   "icons": [
     {
       "src": "icons/icon-192.png",
