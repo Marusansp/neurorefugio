@@ -1,152 +1,492 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SolarFlow | Gestão e Vendas para Aplicador Solar</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0b3b2e" />
+  <link rel="icon" href="icons/icon-192.png" type="image/png" />
+  <link rel="apple-touch-icon" href="icons/icon-512.png" />
+  <style>
+    :root {
+      --bg: #f4f7f9;
+      --surface: #ffffff;
+      --text: #102a43;
+      --muted: #486581;
+      --primary: #0b6b4f;
+      --primary-soft: #d7f5ea;
+      --border: #d9e2ec;
+      --warn: #f0b429;
+      --danger: #d64545;
+    }
 
-<title>NeuroRefúgio</title>
+    body.dark {
+      --bg: #0f1720;
+      --surface: #18222e;
+      --text: #e4edf5;
+      --muted: #b8c7d6;
+      --primary: #2ecc95;
+      --primary-soft: #16382e;
+      --border: #2a3b4d;
+      --warn: #ffd166;
+      --danger: #ff7a7a;
+    }
 
-<!-- PWA: Manifest -->
-<link rel="manifest" href="manifest.json">
+    * { box-sizing: border-box; }
 
-<!-- PWA: Tema -->
-<meta name="theme-color" content="#1c2a38">
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background .2s, color .2s;
+    }
 
-<!-- Ícone para dispositivos -->
-<link rel="icon" href="icons/icon-192.png" type="image/png">
-<link rel="apple-touch-icon" href="icons/icon-512.png">
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
 
-<style>
-:root {
-    --fundo: #f4f7fa;
-    --texto: #1c2a38;
-    --card: #e6ecf1;
-    --card-ativo: #d2dbe3;
-}
-body.dark {
-    --fundo: #0f1115;
-    --texto: #f1f1f1;
-    --card: #1b1f25;
-    --card-ativo: #262b33;
-}
+    .brand {
+      font-size: 20px;
+      font-weight: 700;
+    }
 
-body {
-    margin: 0;
-    padding: 0;
-    background: var(--fundo);
-    font-family: "Inter", Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    min-height: 100vh;
-    color: var(--texto);
-    transition: background 0.3s, color 0.3s;
-}
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+    }
 
-.container {
-    width: 100%;
-    max-width: 480px;
-    padding: 32px 16px;
-}
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
 
-.title {
-    font-size: 36px;
-    margin-bottom: 40px;
-    font-weight: 600;
-    text-align: center;
-}
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 600;
+    }
 
-.button {
-    width: 100%;
-    height: 120px;
-    background: var(--card);
-    border: none;
-    border-radius: 18px;
-    margin-bottom: 22px;
-    font-size: 24px;
-    color: var(--texto);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background 0.2s;
-}
-.button:active {
-    background: var(--card-ativo);
-}
+    .btn.primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
 
-.output-box {
-    margin-top: 32px;
-    min-height: 120px;
-    background: var(--card);
-    padding: 24px;
-    border-radius: 18px;
-    font-size: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    transition: background 0.3s;
-}
+    .container {
+      max-width: 1160px;
+      margin: 22px auto;
+      padding: 0 14px 40px;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 16px;
+    }
 
-.theme-toggle {
-    position: fixed;
-    right: 20px;
-    top: 20px;
-    width: 46px;
-    height: 46px;
-    background: var(--card);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 22px;
-    cursor: pointer;
-    user-select: none;
-}
-</style>
+    nav {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px;
+      height: fit-content;
+      position: sticky;
+      top: 76px;
+    }
+
+    nav button {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 8px;
+    }
+
+    .nav-item.active {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    main section {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    main section.active { display: block; }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .kpi {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      background: var(--bg);
+    }
+
+    .kpi p { margin: 0; color: var(--muted); font-size: 13px; }
+    .kpi strong { font-size: 24px; }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+      margin-bottom: 16px;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      color: var(--muted);
+      background: var(--bg);
+      font-weight: 600;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .ok { background: var(--primary-soft); color: var(--primary); }
+    .warn { background: #fff4dc; color: #8f5c00; }
+    .danger { background: #ffe3e3; color: var(--danger); }
+
+    .automation-box {
+      border: 1px dashed var(--border);
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--bg);
+    }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      padding: 18px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      .container { grid-template-columns: 1fr; }
+      nav { position: static; }
+    }
+  </style>
 </head>
-
 <body>
+  <header>
+    <div class="brand">☀️ SolarFlow <small>Plataforma de Gestão e Vendas para Aplicador Solar</small></div>
+    <div class="header-actions">
+      <button class="btn" id="seedBtn">Popular demo</button>
+      <button class="btn" id="themeBtn">🌓 Tema</button>
+    </div>
+  </header>
 
-<div class="theme-toggle" onclick="toggleTheme()">🌓</div>
+  <div class="container">
+    <nav>
+      <button class="btn nav-item active" data-target="dashboard">Dashboard</button>
+      <button class="btn nav-item" data-target="clientes">Clientes & Leads</button>
+      <button class="btn nav-item" data-target="propostas">Propostas</button>
+      <button class="btn nav-item" data-target="instalacoes">Instalações</button>
+      <button class="btn nav-item" data-target="estoque">Estoque</button>
+      <button class="btn nav-item" data-target="automacoes">IA & Automação</button>
+    </nav>
 
-<div class="container">
-    <div class="title">NeuroRefúgio</div>
+    <main>
+      <section id="dashboard" class="active">
+        <h2>Resumo operacional</h2>
+        <p>KPIs atualizados automaticamente com base nas propostas e instalações.</p>
+        <div class="kpi-grid" id="kpis"></div>
+      </section>
 
-    <button class="button" onclick="show('Respire fundo. Inspire… segure… expire… no seu ritmo.')">Respiração</button>
-    <button class="button" onclick="show('Você está seguro. Você controla o ritmo da experiência.')">Conforto</button>
-    <button class="button" onclick="show('Escolha apenas um ponto de atenção. Deixe o restante descansar.')">Foco</button>
-    <button class="button" onclick="show('Feche os olhos por alguns segundos e perceba o silêncio interno.')">Silêncio</button>
-    <button class="button" onclick="show('Você pode pausar a qualquer momento. Não há pressa.')">Pausa</button>
+      <section id="clientes">
+        <h2>Clientes e Leads</h2>
+        <form id="leadForm">
+          <input name="nome" placeholder="Nome" required />
+          <input name="cidade" placeholder="Cidade" required />
+          <input name="contato" placeholder="WhatsApp / Email" required />
+          <select name="origem" required>
+            <option value="">Origem do lead</option>
+            <option>Instagram</option>
+            <option>Indicação</option>
+            <option>Google</option>
+            <option>Site</option>
+          </select>
+          <button class="btn primary" type="submit">Salvar lead</button>
+        </form>
+        <table>
+          <thead><tr><th>Cliente</th><th>Cidade</th><th>Contato</th><th>Origem</th></tr></thead>
+          <tbody id="leadsTable"></tbody>
+        </table>
+      </section>
 
-    <div id="output" class="output-box">Toque em uma opção para começar.</div>
-</div>
+      <section id="propostas">
+        <h2>Propostas e vendas</h2>
+        <form id="proposalForm">
+          <input name="cliente" placeholder="Cliente" required />
+          <input name="potencia" type="number" min="1" placeholder="Potência (kWp)" required />
+          <input name="valor" type="number" min="0" placeholder="Valor (R$)" required />
+          <select name="status" required>
+            <option value="">Status</option>
+            <option>Enviada</option>
+            <option>Aprovada</option>
+            <option>Perdida</option>
+          </select>
+          <button class="btn primary" type="submit">Registrar proposta</button>
+        </form>
+        <table>
+          <thead><tr><th>Cliente</th><th>kWp</th><th>Valor</th><th>Status</th></tr></thead>
+          <tbody id="proposalTable"></tbody>
+        </table>
+      </section>
 
-<script>
-function show(text) {
-    document.getElementById("output").innerHTML = text;
-}
+      <section id="instalacoes">
+        <h2>Agenda de instalações</h2>
+        <form id="installForm">
+          <input name="cliente" placeholder="Cliente" required />
+          <input name="data" type="date" required />
+          <select name="tecnico" required>
+            <option value="">Equipe responsável</option>
+            <option>Equipe A</option>
+            <option>Equipe B</option>
+            <option>Terceirizada</option>
+          </select>
+          <select name="status" required>
+            <option>Agendada</option>
+            <option>Concluída</option>
+            <option>Em atraso</option>
+          </select>
+          <button class="btn primary" type="submit">Adicionar instalação</button>
+        </form>
+        <table>
+          <thead><tr><th>Cliente</th><th>Data</th><th>Equipe</th><th>Status</th></tr></thead>
+          <tbody id="installTable"></tbody>
+        </table>
+      </section>
 
-function toggleTheme() {
-    document.body.classList.toggle("dark");
-    localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-}
+      <section id="estoque">
+        <h2>Estoque rápido</h2>
+        <form id="stockForm">
+          <input name="item" placeholder="Item (módulo, inversor...)" required />
+          <input name="quantidade" type="number" min="0" placeholder="Quantidade" required />
+          <input name="minimo" type="number" min="0" placeholder="Mínimo" required />
+          <button class="btn primary" type="submit">Atualizar item</button>
+        </form>
+        <table>
+          <thead><tr><th>Item</th><th>Quantidade</th><th>Mínimo</th><th>Alerta</th></tr></thead>
+          <tbody id="stockTable"></tbody>
+        </table>
+      </section>
 
-(function() {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") document.body.classList.add("dark");
-})();
+      <section id="automacoes">
+        <h2>IA & automações (MVP)</h2>
+        <div class="automation-box">
+          <p><strong>Resumo inteligente:</strong> <span id="aiSummary">Sem dados ainda.</span></p>
+          <p><strong>Sugestão de ação:</strong> <span id="aiAction">Cadastre propostas para gerar insights.</span></p>
+          <p>Próximo passo SaaS: integrar OpenAI + WhatsApp API para follow-up automático de leads e classificação preditiva de fechamento.</p>
+        </div>
+      </section>
+    </main>
+  </div>
 
-/* Registro do Service Worker (PWA) */
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker
-            .register("service-worker.js")
-            .catch(err => console.log("SW falhou:", err));
+  <footer>SolarFlow MVP • Pronto para evoluir para arquitetura SaaS com Next.js + Node.js + PostgreSQL/Supabase.</footer>
+
+  <script>
+    const storeKey = 'solarflow_db_v1';
+    const db = JSON.parse(localStorage.getItem(storeKey)) || {
+      leads: [],
+      propostas: [],
+      instalacoes: [],
+      estoque: []
+    };
+
+    const save = () => localStorage.setItem(storeKey, JSON.stringify(db));
+
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(btn => btn.addEventListener('click', () => {
+      navItems.forEach(i => i.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('main section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(btn.dataset.target).classList.add('active');
+    }));
+
+    function currency(v) {
+      return Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function renderLeads() {
+      const tbody = document.getElementById('leadsTable');
+      tbody.innerHTML = db.leads.map(l => `<tr><td>${l.nome}</td><td>${l.cidade}</td><td>${l.contato}</td><td>${l.origem}</td></tr>`).join('');
+    }
+
+    function statusClass(s) {
+      if (s === 'Aprovada' || s === 'Concluída' || s === 'Agendada') return 'ok';
+      if (s === 'Enviada') return 'warn';
+      return 'danger';
+    }
+
+    function renderPropostas() {
+      const tbody = document.getElementById('proposalTable');
+      tbody.innerHTML = db.propostas.map(p => `<tr><td>${p.cliente}</td><td>${p.potencia}</td><td>${currency(p.valor)}</td><td><span class="pill ${statusClass(p.status)}">${p.status}</span></td></tr>`).join('');
+    }
+
+    function renderInstalacoes() {
+      const tbody = document.getElementById('installTable');
+      tbody.innerHTML = db.instalacoes.map(i => `<tr><td>${i.cliente}</td><td>${i.data}</td><td>${i.tecnico}</td><td><span class="pill ${statusClass(i.status)}">${i.status}</span></td></tr>`).join('');
+    }
+
+    function renderEstoque() {
+      const tbody = document.getElementById('stockTable');
+      tbody.innerHTML = db.estoque.map(item => {
+        const low = Number(item.quantidade) <= Number(item.minimo);
+        return `<tr><td>${item.item}</td><td>${item.quantidade}</td><td>${item.minimo}</td><td><span class="pill ${low ? 'danger' : 'ok'}">${low ? 'Repor' : 'OK'}</span></td></tr>`;
+      }).join('');
+    }
+
+    function renderKpis() {
+      const propostasAprovadas = db.propostas.filter(p => p.status === 'Aprovada');
+      const instalacoesConcluidas = db.instalacoes.filter(i => i.status === 'Concluída');
+      const faturamento = propostasAprovadas.reduce((acc, p) => acc + Number(p.valor || 0), 0);
+      const conversao = db.propostas.length ? ((propostasAprovadas.length / db.propostas.length) * 100).toFixed(1) : 0;
+
+      document.getElementById('kpis').innerHTML = `
+        <article class="kpi"><p>Leads ativos</p><strong>${db.leads.length}</strong></article>
+        <article class="kpi"><p>Propostas enviadas</p><strong>${db.propostas.length}</strong></article>
+        <article class="kpi"><p>Taxa de conversão</p><strong>${conversao}%</strong></article>
+        <article class="kpi"><p>Faturamento aprovado</p><strong>${currency(faturamento)}</strong></article>
+        <article class="kpi"><p>Instalações concluídas</p><strong>${instalacoesConcluidas.length}</strong></article>
+      `;
+
+      const atraso = db.instalacoes.filter(i => i.status === 'Em atraso').length;
+      const estoqueCritico = db.estoque.filter(i => Number(i.quantidade) <= Number(i.minimo)).length;
+      document.getElementById('aiSummary').textContent = `Você possui ${db.leads.length} leads, ${propostasAprovadas.length} vendas aprovadas e ${instalacoesConcluidas.length} instalações finalizadas.`;
+      document.getElementById('aiAction').textContent = atraso > 0
+        ? `Priorize ${atraso} instalação(ões) em atraso e envie atualização automática ao cliente.`
+        : estoqueCritico > 0
+        ? `Reposição recomendada para ${estoqueCritico} item(ns) críticos do estoque.`
+        : 'Ative automação de follow-up em 24h para propostas enviadas e aumente a conversão.';
+    }
+
+    function renderAll() {
+      renderLeads();
+      renderPropostas();
+      renderInstalacoes();
+      renderEstoque();
+      renderKpis();
+      save();
+    }
+
+    document.getElementById('leadForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      db.leads.unshift(Object.fromEntries(fd.entries()));
+      e.target.reset();
+      renderAll();
     });
-}
-</script>
 
+    document.getElementById('proposalForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      db.propostas.unshift(Object.fromEntries(fd.entries()));
+      e.target.reset();
+      renderAll();
+    });
+
+    document.getElementById('installForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      db.instalacoes.unshift(Object.fromEntries(fd.entries()));
+      e.target.reset();
+      renderAll();
+    });
+
+    document.getElementById('stockForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      db.estoque.unshift(Object.fromEntries(fd.entries()));
+      e.target.reset();
+      renderAll();
+    });
+
+    document.getElementById('seedBtn').addEventListener('click', () => {
+      db.leads = [
+        { nome: 'Carlos Silva', cidade: 'Campinas', contato: '(19) 99999-1111', origem: 'Indicação' },
+        { nome: 'Aline Souza', cidade: 'Sorocaba', contato: 'aline@email.com', origem: 'Instagram' }
+      ];
+      db.propostas = [
+        { cliente: 'Carlos Silva', potencia: '6.2', valor: '29500', status: 'Aprovada' },
+        { cliente: 'Aline Souza', potencia: '4.8', valor: '22800', status: 'Enviada' }
+      ];
+      db.instalacoes = [
+        { cliente: 'Carlos Silva', data: '2026-04-08', tecnico: 'Equipe A', status: 'Agendada' }
+      ];
+      db.estoque = [
+        { item: 'Módulo 550W', quantidade: '14', minimo: '20' },
+        { item: 'Inversor 5kW', quantidade: '8', minimo: '5' }
+      ];
+      renderAll();
+    });
+
+    document.getElementById('themeBtn').addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('solarflow_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    if (localStorage.getItem('solarflow_theme') === 'dark') {
+      document.body.classList.add('dark');
+    }
+
+    renderAll();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js').catch(err => console.log('SW falhou:', err));
+      });
+    }
+  </script>
 </body>
 </html>
-
-
